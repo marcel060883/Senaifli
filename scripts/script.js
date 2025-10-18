@@ -86,3 +86,12 @@ function aplicarFiltro(generoSelecionado){
 //      - Este bloco garante que só manipulamos os elementos depois que eles existirem.
 //==================================================================================
 
+document.addEventListener("DOMContentLoaded", function(){
+  if (selectGenero){
+    selectGenero.addEventListener("change",funcion(){
+      const generoSelecionado = this.value === "" ? "todos" : this.value;
+      aplicarFiltro(generoSelecionado);
+    )
+    })
+  }
+})
