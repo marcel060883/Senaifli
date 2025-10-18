@@ -1,7 +1,7 @@
-//===================================================================================
-//1. DADOS FIXOS (Objetivos de Filmes e Séries)
-//     -Nossa fonte de dados (como um "mini-banco de dados" local)
-//===================================================================================
+// ==============================================================================
+// 1. DADOS FIXOS (Objetos de Filmes e Séries)
+//    - Nossa fonte de dados (como um "mini-banco de dados" local).
+// ==============================================================================
 
 const dados = {
   filmes: [
@@ -22,16 +22,16 @@ const dados = {
   ]
 };
 
-//==================================================================================
+// ==============================================================================
 // 2. SELETORES DO DOM (Capturando Elementos do HTML)
-//      -Referencias para os elementos HTML que o JS precisa manipular
-//==================================================================================
+//    - Referências para os elementos HTML que o JS precisa manipular.
+// ==============================================================================
 
-// Captura todos os cards de filmes (elementos <a> dentro de #filmes-container )
-const filmesCard = document.querySelectorAll("#filmes-container a");
+// Captura todos os cards de filmes (elementos <a> dentro de #filmes-container)
+const filmesCards = document.querySelectorAll("#filmes-container a");
 
-// Captura todos os cards de series (elementos <a> dentro de #series-container )
-const seriesCard = document.querySelectorAll("#series-container a");
+// Captura todos os cards de séries (elementos <a> dentro de #series-container)
+const seriesCards = document.querySelectorAll("#series-container a");
 
 // Captura o elemento <select> para o filtro de gênero
 const selectGenero = document.getElementById("genero");
@@ -40,58 +40,69 @@ const selectGenero = document.getElementById("genero");
 const btnLimpar = document.getElementById("limpar-filtro");
 
 // Captura o campo de texto para pesquisa
-const inputPesquiar = document.getElementById("pesquisar");
+const inputPesquisar = document.getElementById("pesquisar");
 
-//Seletores do Menu Mobile
-const btnMenu = document.geteElementById("menu-btn");
-const menuMobile =document.getElementById("menu-mobile");
+// Seletores do Menu Mobile
+const btnMenu = document.getElementById("menu-btn");
+const menuMobile = document.getElementById("menu-mobile");
 
-//==================================================================================
+// ==============================================================================
 // 3. FUNÇÃO PRINCIPAL DE RENDERIZAÇÃO E FILTRAGEM (REUTILIZÁVEL)
-//      -Esta função define a visibilidade e a imagem de fundo de cada card.
-//      -Foi definida de forma global para ser usada em vários pontos do código.
-//==================================================================================
+//    - Esta função define a visibilidade e a imagem de fundo de cada card.
+//    - Foi definida de forma global para ser usada em vários pontos do código.
+// ==============================================================================
 
-function renderizar(cards, lista, filtro = "todos"){
-    cards.forEach((card, index) =>{
-        const item = lista[index];
-        const genero = item && item.genero;
-        //essa parte funciona como um seletor do bloco, ele vai selecionar ou todos os generos no bloco que escolhe o genero ou um genero especifico
-        const correspondeFiltro = filtro === "todos" || (genero && generos.includes(filtro));
-        if (item && correspondeFiltro) {
-            card.style.display = "block";
-            card.style.backgroudImage = `url(${item.imagem})`;
-            card.style.backgroundSize = "cover";
-            card.style.backgroudPosition = "center";
-        } else {
-            card.style.display = "none";
-        }
-    });
-    console.log(`Renderização concluída para o filtro: ${filtro}`);
+function renderizar(cards, lista, filtro = "todos") {
+  cards.forEach((card, index) => {
+    const item = lista[index];
+    const generos = item && item.genero;
+
+    const correspondeFiltro = filtro === "todos" || (generos && generos.includes(filtro))
+
+    if (item && correspondeFiltro) {
+      card.style.display = "block";
+      card.style.backgroundImage = `url(${item.imagem})`;
+      card.style.backgroundSize = "cover";
+      card.style.backgroundPosition = "center";
+    } else {
+      card.style.display = "none";
+    }
+  });
+  console.log(`Renderização concluída para o filtro: ${filtro}`);
 };
 
-//==================================================================================
+// ==============================================================================
 // 4. FUNÇÃO QUE CHAMA A RENDERIZAÇÃO PARA FILMES E SÉRIES
-//      - Centraliza a chamada para evitar repetição de código.
-//==================================================================================
-
-function aplicarFiltro(generoSelecionado){
-    renderizar(filmesCard, dados.filmes, generoSelecionado);
-    renderizar(seriesCard, dados.series, generoSelecionado);
-
+//    - Centraliza a chamada para evitar repetição de código.
+// ==============================================================================
+function aplicarFiltro(generoSelecionado) {
+  renderizar(filmesCards, dados.filmes, generoSelecionado);
+  renderizar(seriesCards, dados.series, generoSelecionado);
 }
 
-//==================================================================================
-// 5 EVENTOS DO DOM (Ações que ocorrem após o carregamento da página)
-//      - Este bloco garante que só manipulamos os elementos depois que eles existirem.
-//==================================================================================
+// ==============================================================================
+// 5. EVENTOS DO DOM (Ações que ocorrem após o carregamento da página)
+//    - Este bloco garante que só manipularemos os elementos depois que eles existirem.
+// ==============================================================================
 
-document.addEventListener("DOMContentLoaded", function(){
-  if (selectGenero){
-    selectGenero.addEventListener("change",funcion(){
+document.addEventListener("DOMContentLoaded", function () {
+  // Ação: Quando o usuário troca o gênero no <select>
+  if (selectGenero) {
+    selectGenero.addEventListener("change", function () {
       const generoSelecionado = this.value === "" ? "todos" : this.value;
       aplicarFiltro(generoSelecionado);
-    )
-    })
+    });
   }
-})
+  // Ação: Quando o usuário clica em "Limpar filtro"
+  if(btnLimpar) {
+    this.addEventListener("click", function (){
+      selectGenero.selectedIndex = 0;
+      aplicarFiltro("todos");
+    });
+  }
+  aplicarFiltro("todos");
+});
+
+// ==============================================================================
+// 6. PESQUISA POR TEXTO (Filtro por Título)
+// ==============================================================================
