@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   // Ação: Quando o usuário clica em "Limpar filtro"
   if(btnLimpar) {
-    this.addEventListener("click", function (){
+    btnLimpar.addEventListener("click", function (){
       selectGenero.selectedIndex = 0;
       aplicarFiltro("todos");
     });
@@ -106,3 +106,31 @@ document.addEventListener("DOMContentLoaded", function () {
 // ==============================================================================
 // 6. PESQUISA POR TEXTO (Filtro por Título)
 // ==============================================================================
+
+if (inputPesquisar) {
+  inputPesquisar.addEventListener("input", function (){
+    const palavraDigitada = this.value.toLowerCase();
+
+    filmesCards.forEach((card, index) => {
+      const titulo = dados.filmes[index].titulo.toLowerCase();
+
+      card.style.display = titulo.includes(palavraDigitada) ? "block" : "none";
+    });
+
+    seriesCards.forEach((card, index) => {
+      const titulo = dados.series[index].titulo.toLowerCase();
+
+      card.style.diplay = titulo.includes(palavraDigitada) ? "block" : "none";
+     });
+     if (selectGenero) selectGenero.selectedIndex = 0;
+  });
+}
+
+// ==============================================================================
+// 7. MENU MOBILE (Alternar a visibilidade)
+// ==============================================================================
+if (btnMenu && menuMobile){
+  btnMenu.addEventListener("click", () => {
+    menuMobile.style.display = menuMobile.style.display === "flex" ? "none" : "flex";
+  });
+}
